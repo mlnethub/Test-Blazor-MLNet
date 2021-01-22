@@ -16,9 +16,14 @@ namespace Test_Blazor_MLNet.Client
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("#app");
+            
+            // Removed for Blazor pre-rendering
+            //builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            // Add Lucene Index service (load Lucene Index from zip file and expose Directory Reader)
+            builder.Services.AddSingleton<LuceneIndexService>(LuceneIndexService.Instance);
 
             await builder.Build().RunAsync();
         }
